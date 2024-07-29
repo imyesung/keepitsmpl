@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const emphasisOverlay = document.getElementById('emphasis-overlay');
     const storyText = document.getElementById('story-text');
     const choicesContainer = document.getElementById('choices-container');
-    const startBtn = document.getElementById('start-btn');
+    const coinContainer = document.getElementById('coin-container');
     const coinTypography = document.getElementById('coin-typography');
 
     const story = [

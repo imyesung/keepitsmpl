@@ -4,75 +4,63 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainImage = document.getElementById('main-image');
     const storyText = document.getElementById('story-text');
     const choicesContainer = document.getElementById('choices-container');
-    const coinTypography = document.getElementById('coin-typography');
-    const coinContainer = document.getElementById('coin-container');
     const coin = document.getElementById('coin');
+    const coinTypography = document.getElementById('coin-typography');
     const textContainer = document.getElementById('text-container');
 
     const story = [
         {
-          "id": "start",
-          "background":"images/desertsand.gif",
-          "storySegments": [
-            "단순하게 살아야돼.",
-            "남자가 얼굴을 찡그린다.",
-            "언덕 너머, 폐허가 된 주유소.",
-            "햇빛에 달궈진 아스팔트 위로 아지랑이가 피어오른다.",
-            "25센트짜리 쿼터.",
-            "그는 중얼거린다. \"단순하게 살아야 편해.\""
-          ],
-          "choices": [
-            { "text": "계속", "nextScene": "confrontation" }
-          ]
+            id: "start",
+            background: "images/car.avif",
+            storySegments: [
+                "폐허 같은 사막에 땅거미가 그림자를 늘어뜨린다.",
+                "\"단순하게 생각해.\"",
+                "구질한 유니폼을 입은 얼굴 앞으로 동전이 나타났다 사라진다."
+            ],
+            nextScene: "start-1"
         },
         // 여기에 다른 장면들을 추가하세요.
     ];
 
+
     function startGame() {
-        console.log("Game started");
         coinTypography.style.display = 'none';
-        coinContainer.style.display = 'block';
-        // coin.classList.add('coin-flip'); 이 줄은 제거
-        setTimeout(() => {
+        coin.style.opacity = '1';
+        coin.classList.add('coin-animate');
+        
+        coin.addEventListener('animationend', function onAnimationEnd() {
+            coin.removeEventListener('animationend', onAnimationEnd);
+            coin.style.opacity = '0';
+            coin.classList.remove('coin-animate');
             app.classList.remove('hide-content');
-            app.classList.add('show-content');
             updateScene();
-        }, 1000); // GIF 애니메이션 길이에 맞게 조정 가능
+        });
     }
     async function updateScene() {
-        console.log("Updating scene:", currentScene);
         const scene = story.find(s => s.id === currentScene);
-        if (!scene) {
-            console.error("Scene not found:", currentScene);
-            return;
+        if (!scene) return;
+        
+        mainImage.src = scene.background;
+        storyText.innerHTML = '';
+        choicesContainer.innerHTML = '';
+        
+        textContainer.classList.add('show');
+        for (let segment of scene.storySegments) {
+            await typeWriter(segment, storyText);
+            await waitForClick();
+            storyText.innerHTML += '<br><br>';
         }
         
-        if (mainImage) mainImage.src = scene.background;
-        
-        if (storyText) storyText.innerHTML = '';
-        if (choicesContainer) choicesContainer.innerHTML = '';
-        
-        if (scene.storySegments.length > 0) {
-            textContainer.classList.add('show');
-            for (let segment of scene.storySegments) {
-                await typeWriter(segment, storyText);
-                await waitForClick();
-                if (storyText) storyText.innerHTML += '<br><br>';
-            }
-        } else {
-            textContainer.classList.remove('show');
-        }
-        
-        scene.choices.forEach(choice => {
+        if (scene.nextScene) {
             const button = document.createElement('button');
-            button.textContent = choice.text;
+            button.textContent = "계속";
             button.className = 'choice-btn';
             button.onclick = () => {
-                currentScene = choice.nextScene;
+                currentScene = scene.nextScene;
                 updateScene();
             };
-            if (choicesContainer) choicesContainer.appendChild(button);
-        });
+            choicesContainer.appendChild(button);
+        }
     }
 
     function typeWriter(text, element, speed = 50) {

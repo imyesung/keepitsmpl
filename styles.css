@@ -34,7 +34,7 @@ body, html {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: brightness(0.7) sepia(0.2) hue-rotate(20deg);
+    filter: brightness(0.7) sepia(0.2) hue-rotate(10deg);
 }
 
 #coin-typography {
@@ -99,32 +99,29 @@ body, html {
     animation: glitch 0.3s infinite;
 }
 
-
-#coin-container {
+#coin {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
     display: none;
-    width: 100px; /* GIF 크기에 맞게 조정 */
-    height: 100px; /* GIF 크기에 맞게 조정 */
+    z-index: 20;
+}
+
+@keyframes zoom-in {
+    0% { transform: translate(-50%, -50%) scale(0.1); opacity: 0; }
+    50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+.coin-animate {
+    display: block !important;
     animation: zoom-in 2s ease-in-out;
     animation-iteration-count: 3;
 }
 
-#coin {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-@keyframes zoom-in {
-    from {
-        transform: translate(-50%, -50%) scale(1);
-    }
-    to {
-        transform: translate(-50%, -50%) scale(1.08);
-    }
-}
 #text-container {
     position: absolute;
     bottom: -100%;
