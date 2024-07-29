@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const story = [
         {
           "id": "start",
-          "background": "/images/desertsand.gif",
+          "background": "/api/placeholder/414/736",
           "emphasizedText": "운명의 동전",
           "storySegments": [
             "단순하게 살아야돼.",
@@ -29,44 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     function startGame() {
-        console.log("Game started");
+        console.log("Game started"); // 디버깅을 위한 로그
         if (startBtn) startBtn.style.display = 'none';
         if (coinTypography) coinTypography.style.display = 'none';
-        app.classList.remove('hide-content');
-        app.classList.add('show-content');
+        if (app) app.classList.add('show-content');
         updateScene();
-    }
-
-    async function updateScene() {
-        console.log("Updating scene:", currentScene);
-        const scene = story.find(s => s.id === currentScene);
-        if (!scene) {
-            console.error("Scene not found:", currentScene);
-            return;
-        }
-        
-        if (mainImage) mainImage.src = scene.background;
-        if (emphasisOverlay) emphasisOverlay.textContent = scene.emphasizedText;
-        
-        if (storyText) storyText.innerHTML = '';
-        if (choicesContainer) choicesContainer.innerHTML = '';
-        
-        for (let segment of scene.storySegments) {
-            await typeWriter(segment, storyText);
-            await waitForClick();
-            if (storyText) storyText.innerHTML += '<br><br>';
-        }
-        
-        scene.choices.forEach(choice => {
-            const button = document.createElement('button');
-            button.textContent = choice.text;
-            button.className = 'choice-btn';
-            button.onclick = () => {
-                currentScene = choice.nextScene;
-                updateScene();
-            };
-            if (choicesContainer) choicesContainer.appendChild(button);
-        });
     }
 
     function typeWriter(text, element, speed = 50) {
@@ -86,6 +53,44 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    async function updateScene() {
+        console.log("Updating scene:", currentScene); // 디버깅을 위한 로그
+        const scene = story.find(s => s.id === currentScene);
+        if (!scene) {
+            console.error("Scene not found:", currentScene);
+            return;
+        }
+        
+        if (app) app.classList.remove('show-content');
+        
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        if (mainImage) mainImage.src = scene.background;
+        if (emphasisOverlay) emphasisOverlay.textContent = scene.emphasizedText;
+        
+        if (storyText) storyText.innerHTML = '';
+        if (choicesContainer) choicesContainer.innerHTML = '';
+        
+        if (app) app.classList.add('show-content');
+        
+        for (let segment of scene.storySegments) {
+            await typeWriter(segment, storyText);
+            await waitForClick();
+            if (storyText) storyText.innerHTML += '<br><br>';
+        }
+        
+        scene.choices.forEach(choice => {
+            const button = document.createElement('button');
+            button.textContent = choice.text;
+            button.className = 'choice-btn';
+            button.onclick = () => {
+                currentScene = choice.nextScene;
+                updateScene();
+            };
+            if (choicesContainer) choicesContainer.appendChild(button);
+        });
+    }
+
     function waitForClick() {
         return new Promise(resolve => {
             const clickHandler = () => {
@@ -98,8 +103,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (startBtn) {
         startBtn.addEventListener('click', startGame);
+        console.log("Toss button event listener added"); // 디버깅을 위한 로그
+    } else {
+        console.error("Start button not found");
     }
 
-    app.classList.add('hide-content');
+    const style = document.createElement('style');
+    style.textContent = `
+        #app {
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        #app.show-content {
+            opacity: 1;
+        }
+    `;
+    document.head.appendChild(style);
+
     console.log("Game script loaded successfully");
 });

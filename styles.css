@@ -25,6 +25,67 @@ body, html {
     position: relative;
 }
 
+#coin-typography {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Arial', sans-serif;
+    font-size: 15vw;
+    font-weight: 900;
+    color: transparent;
+    -webkit-text-stroke: 2px var(--text-color);
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+#coin-typography::before {
+    content: 'C01N';
+    position: absolute;
+    left: 0;
+    text-shadow: 
+        2px 2px var(--accent-color),
+        4px 4px var(--accent-color),
+        6px 6px var(--accent-color);
+    z-index: -1;
+    background: linear-gradient(45deg, var(--accent-color), transparent);
+    -webkit-background-clip: text;
+    background-clip: text;
+    opacity: 0.3;
+}
+
+#coin-typography span {
+    display: inline-block;
+    transform: scaleY(2) rotate(15deg);
+    margin: 0 -0.1em;
+}
+
+@keyframes glitch {
+    0% {
+        text-shadow: 2px 2px var(--accent-color), -2px -2px var(--text-color);
+    }
+    25% {
+        text-shadow: -2px -2px var(--accent-color), 2px 2px var(--text-color);
+    }
+    50% {
+        text-shadow: 2px -2px var(--accent-color), -2px 2px var(--text-color);
+    }
+    75% {
+        text-shadow: -2px 2px var(--accent-color), 2px -2px var(--text-color);
+    }
+    100% {
+        text-shadow: 2px 2px var(--accent-color), -2px -2px var(--text-color);
+    }
+}
+
+#coin-typography:hover {
+    animation: glitch 0.3s infinite;
+}
+
 #image-container {
     position: absolute;
     top: 0;
@@ -38,7 +99,7 @@ body, html {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: brightness(0.7) sepia(0.2) hue-rotate(260deg);
+    filter: brightness(0.7) sepia(0.2) hue-rotate(20deg);
 }
 
 #text-container {
@@ -50,16 +111,6 @@ body, html {
     transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
     border-top: 2px solid var(--accent-color);
     border-radius: 40px 40px 0 0;
-}
-
-#emphasized-text {
-    font-weight: 700;
-    color: var(--accent-color);
-    font-size: 1.4rem;
-    margin-bottom: 0.8rem;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1) 0.2s;
 }
 
 #story-text {
