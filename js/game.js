@@ -2,17 +2,17 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentScene = "start";
     const app = document.getElementById('app');
     const mainImage = document.getElementById('main-image');
-    const emphasisOverlay = document.getElementById('emphasis-overlay');
     const storyText = document.getElementById('story-text');
     const choicesContainer = document.getElementById('choices-container');
-    const startBtn = document.getElementById('start-btn');
     const coinTypography = document.getElementById('coin-typography');
+    const coinContainer = document.getElementById('coin-container');
+    const coin = document.getElementById('coin');
+    const textContainer = document.getElementById('text-container');
 
     const story = [
         {
           "id": "start",
-          "background": "/images/desertsand.gif",
-          "emphasizedText": "운명의 동전",
+          "background":"images/desertsand.gif",
           "storySegments": [
             "단순하게 살아야돼.",
             "남자가 얼굴을 찡그린다.",
@@ -30,13 +30,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function startGame() {
         console.log("Game started");
-        if (startBtn) startBtn.style.display = 'none';
-        if (coinTypography) coinTypography.style.display = 'none';
-        app.classList.remove('hide-content');
-        app.classList.add('show-content');
-        updateScene();
+        coinTypography.style.display = 'none';
+        coinContainer.style.display = 'block';
+        // coin.classList.add('coin-flip'); 이 줄은 제거
+        setTimeout(() => {
+            app.classList.remove('hide-content');
+            app.classList.add('show-content');
+            updateScene();
+        }, 1000); // GIF 애니메이션 길이에 맞게 조정 가능
     }
-
     async function updateScene() {
         console.log("Updating scene:", currentScene);
         const scene = story.find(s => s.id === currentScene);
@@ -46,15 +48,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         if (mainImage) mainImage.src = scene.background;
-        if (emphasisOverlay) emphasisOverlay.textContent = scene.emphasizedText;
         
         if (storyText) storyText.innerHTML = '';
         if (choicesContainer) choicesContainer.innerHTML = '';
         
-        for (let segment of scene.storySegments) {
-            await typeWriter(segment, storyText);
-            await waitForClick();
-            if (storyText) storyText.innerHTML += '<br><br>';
+        if (scene.storySegments.length > 0) {
+            textContainer.classList.add('show');
+            for (let segment of scene.storySegments) {
+                await typeWriter(segment, storyText);
+                await waitForClick();
+                if (storyText) storyText.innerHTML += '<br><br>';
+            }
+        } else {
+            textContainer.classList.remove('show');
         }
         
         scene.choices.forEach(choice => {
@@ -96,9 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (startBtn) {
-        startBtn.addEventListener('click', startGame);
-    }
+    coinTypography.addEventListener('click', startGame);
 
     app.classList.add('hide-content');
     console.log("Game script loaded successfully");
