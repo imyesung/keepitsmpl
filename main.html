@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>그림자의 춤: 운명의 미로</title>
+    <title>C01N</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -210,10 +210,10 @@
 <body>
     <div id="app">
         <div id="image-container">
-            <img id="main-image" src="/api/placeholder/414/736" alt="배경 이미지">
+            <img id="main-image" src="images/opening.jpeg" alt="배경 이미지">
         </div>
-        <h1 id="main-title">그림자의 춤</h1>
-        <button id="start-btn">시작</button>
+        <h1 id="main-title">C01N<h1>
+        <button id="start-btn" onclick="startGame()">시작</button>
         <div id="inventory"></div>
         <div id="text-container">
             <div id="emphasized-text"></div>
@@ -227,8 +227,8 @@
         const story = [
             {
                 id: "start",
-                background: "/api/placeholder/414/736",
-                emphasizedText: "운명의 미로",
+                background: "images/00_cointoss.gif",
+                emphasizedText: "개노답인생",
                 storyText: "모래바람이 휘몰아치는 황폐한 거리. 한 남자의 실루엣이 천천히 다가옵니다.",
                 choices: [
                     { text: "남자에게 다가간다", nextScene: "approach_man" },
@@ -263,7 +263,168 @@
                 ]
             }
         ];
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>C01N</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gloock&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #120024;
+            --text-color: #d0c0e0;
+            --accent-color: #6a4e8a;
+            --secondary-color: #3a2a4a;
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow: hidden;
+            background-image: url('path/to/your/background-image.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        #app {
+            width: 100%;
+            height: 100%;
+            max-width: 414px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+        h1 {
+            font-family: 'Gloock', serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div id="image-container">
+            <img id="main-image" src="images/opening.jpeg" alt="배경 이미지">
+        </div>
+        <h1 id="main-title">h1h1h1h1h1h1</h1>
+        <button id="start-btn" onclick="startGame()">시작</button>
+        <div id="inventory"></div>
+        <div id="text-container">
+            <div id="emphasized-text"></div>
+            <div id="story-text"></div>
+            <div id="choices-container"></div>
+        </div>
+        <button id="continue-btn">▼</button>
+    </div>
 
+    <script>
+        const story = [
+            {
+                id: "start",
+                background: "images/00_cointoss.gif",
+                emphasizedText: "개노답인생",
+                storyText: "모래바람이 휘몰아치는 황폐한 거리. 한 남자의 실루엣이 천천히 다가옵니다.",
+                choices: [
+                    { text: "남자에게 다가간다", nextScene: "approach_man" },
+                    { text: "숨어서 지켜본다", nextScene: "hide_and_watch" }
+                ]
+            },
+            {
+                id: "approach_man",
+                background: "/api/placeholder/414/736",
+                emphasizedText: "낯선 대면",
+                storyText: "당신이 다가가자 남자가 멈춰 섭니다. 그의 얼굴은 모래바람에 가려 보이지 않습니다.",
+                nextScene: "continue_approach_man"
+            }
+        ];
+
+        function startGame() {
+            const mainImage = document.getElementById('main-image');
+            const emphasizedText = document.getElementById('emphasized-text');
+            const storyText = document.getElementById('story-text');
+            const choicesContainer = document.getElementById('choices-container');
+
+            if (mainImage) {
+                mainImage.src = story[0].background;
+            } else {
+                console.error('main-image 요소를 찾을 수 없습니다.');
+            }
+
+            if (emphasizedText) {
+                emphasizedText.textContent = story[0].emphasizedText;
+            } else {
+                console.error('emphasized-text 요소를 찾을 수 없습니다.');
+            }
+
+            if (storyText) {
+                storyText.textContent = story[0].storyText;
+            } else {
+                console.error('story-text 요소를 찾을 수 없습니다.');
+            }
+
+            if (choicesContainer) {
+                choicesContainer.innerHTML = '';
+                story[0].choices.forEach(choice => {
+                    const button = document.createElement('button');
+                    button.textContent = choice.text;
+                    button.onclick = () => loadScene(choice.nextScene);
+                    choicesContainer.appendChild(button);
+                });
+            } else {
+                console.error('choices-container 요소를 찾을 수 없습니다.');
+            }
+        }
+
+        function loadScene(sceneId) {
+            const scene = story.find(s => s.id === sceneId);
+            if (!scene) {
+                console.error(`Scene with id ${sceneId} not found.`);
+                return;
+            }
+
+            const mainImage = document.getElementById('main-image');
+            const emphasizedText = document.getElementById('emphasized-text');
+            const storyText = document.getElementById('story-text');
+            const choicesContainer = document.getElementById('choices-container');
+
+            if (mainImage) {
+                mainImage.src = scene.background;
+            } else {
+                console.error('main-image 요소를 찾을 수 없습니다.');
+            }
+
+            if (emphasizedText) {
+                emphasizedText.textContent = scene.emphasizedText;
+            } else {
+                console.error('emphasized-text 요소를 찾을 수 없습니다.');
+            }
+
+            if (storyText) {
+                storyText.textContent = scene.storyText;
+            } else {
+                console.error('story-text 요소를 찾을 수 없습니다.');
+            }
+
+            if (choicesContainer) {
+                choicesContainer.innerHTML = '';
+                if (scene.choices) {
+                    scene.choices.forEach(choice => {
+                        const button = document.createElement('button');
+                        button.textContent = choice.text;
+                        button.onclick = () => loadScene(choice.nextScene);
+                        choicesContainer.appendChild(button);
+                    });
+                }
+            } else {
+                console.error('choices-container 요소를 찾을 수 없습니다.');
+            }
+        }
+    </script>
+</body>
+</html>
         let currentScene = "start";
         let inventory = [];
         const app = document.getElementById('app');
